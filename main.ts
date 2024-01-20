@@ -3,8 +3,8 @@ import { Bot, webhookCallback } from "https://deno.land/x/grammy@v1.20.3/mod.ts"
 
 const bot = new Bot(Deno.env.get("TOKEN")!);
 
-bot.on("message:text", async (message) => {
-	const autoResponse = autoResponses.find((ctx) => ctx.trigger === message.text.toLowerCase());
+bot.on("message:text", async (ctx) => {
+	const autoResponse = autoResponses.find((data) => data.trigger === ctx.message.text.toLowerCase());
 	if (autoResponse) await ctx.reply(autoResponse.response);
 });
 
