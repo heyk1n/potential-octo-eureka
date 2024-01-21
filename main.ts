@@ -17,14 +17,22 @@ bot.on("message:text", async (ctx) => {
 
 async function handler(request): Promise<Response> {
 	const url = new URL(request.url);
+	const secretToken = Deno.env.get("SECRET_TOKEN")!;
+
 	switch(request.method) {
 		case 'GET': {
-			await bot.api.setWebhook(url.origin);
+			await bot.api.setWebhook(
+				url.origin,
+				{ secret_token: secretToken }
+			);
 			return new Response("200: OK")
 			break;
 		}
 		case 'POST': {
-			return webhookCallback(bot, "std/http")(request);
+			return webhookCallback(
+				bot, "std/http",
+				{ secretToken }
+			)(request);
 			break;
 		}
 		default: {
